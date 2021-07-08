@@ -1,0 +1,6 @@
+.popup-image__container {
+    position: relative;
+    width: fit-content;
+    max-height: fit-content;
+    margin: 0;
+}
