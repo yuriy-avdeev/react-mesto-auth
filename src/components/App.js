@@ -1,7 +1,11 @@
 import React from 'react';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
 import Main from './Main';
+import Login from './Login';
+import Register from './Register';
+import InfoTooltip from './InfoTooltip';
 import ImagePopup from './ImagePopup';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
@@ -13,22 +17,23 @@ function App() {
 
     const [currentUser, setCurrentUser] = React.useState();
     const [cards, setCards] = React.useState([]);
+    const [loggedIn, setLoggedIn] = React.useState(false);
 
     React.useEffect(() => {
         api.getUserInfo()
             .then(userData => {
                 setCurrentUser(userData);
             })
-            .catch(err =>console.log(err))
+            .catch(err => console.log(err))
     }, []);
 
     React.useEffect(() => {
         api.getCards()
             .then(dataCardList => {
-                // dataCardList = dataCardList.slice(0, 6);  // <=
+                dataCardList = dataCardList.slice(0, 3);  // <=
                 setCards(dataCardList);
             })
-            .catch(err =>console.log(err))
+            .catch(err => console.log(err))
     }, []);
 
     const closeAllPopups = () => {
@@ -36,6 +41,7 @@ function App() {
         setIsAddPlacePopupOpen(false);
         setIsEditProfilePopupOpen(false);
         setSelectedCard();
+        setIsInfoTooltipOpen(false);
     }
 
     const handleCardLike = (clickedCard) => {
@@ -48,7 +54,7 @@ function App() {
                     )
                 );
             })
-            .catch(err =>console.log(err))
+            .catch(err => console.log(err))
     }
 
     const handleCardDelete = (clickedCard) => {
@@ -56,7 +62,7 @@ function App() {
             .then(() => {
                 setCards(cards.filter(card => card._id !== clickedCard._id));
             })
-            .catch(err =>console.log(err))
+            .catch(err => console.log(err))
     }
 
     // обновление данных польз-ля
@@ -72,7 +78,7 @@ function App() {
                 setCurrentUser(userData);
                 closeAllPopups();
             })
-            .catch(err =>console.log(err))
+            .catch(err => console.log(err))
     }
 
     // добавление новой карточки 
@@ -88,7 +94,7 @@ function App() {
                 setCards([newCard, ...cards]);
                 closeAllPopups();
             })
-            .catch(err =>console.log(err))
+            .catch(err => console.log(err))
     }
 
     // изменение аватарки
@@ -104,7 +110,7 @@ function App() {
                 setCurrentUser(userData);
                 closeAllPopups();
             })
-            .catch(err =>console.log(err))
+            .catch(err => console.log(err))
     }
 
     // увеличенная фотография
@@ -114,19 +120,42 @@ function App() {
         setSelectedCard(card);
     }
 
+    // информация о регистрации
+    const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState(true);
+
+    // setIsInfoTooltipOpen(!isInfoTooltipOpen); // <<<<<<<<<<<<===============FIX
+
     return (
         <CurrentUser.Provider value={currentUser}>
             <div className="page">
                 <Header />
-                <Main
-                    onEditAvatar={handleEditAvatarClick}
-                    onAddPlace={handleAddPlaceClick}
-                    onEditProfile={handleEditProfileClick}
-                    onCardClick={handleCardClick}
-                    cards={cards}
-                    onCardLike={handleCardLike}
-                    onCardDelete={handleCardDelete}
-                />
+
+                <Switch>
+                    <Route exact path="/mesto-react-auth">
+                        <Main
+                            onEditAvatar={handleEditAvatarClick}
+                            onAddPlace={handleAddPlaceClick}
+                            onEditProfile={handleEditProfileClick}
+                            onCardClick={handleCardClick}
+                            cards={cards}
+                            onCardLike={handleCardLike}
+                            onCardDelete={handleCardDelete}
+                        />
+                    </Route>
+
+                    <Route path="/mesto-react-auth/log-in">
+                        <Login />
+                    </Route>
+
+                    <Route path="/mesto-react-auth/sign-up">
+                        <Register />
+                    </Route>
+
+                    {/* <Route exact path="/">
+                        {loggedIn ? <Redirect to="/mesto-react-auth" /> : <Redirect to="/mesto-react-auth/log-in" />}
+                    </Route> */}
+
+                </Switch>
 
                 <EditAvatarPopup
                     isOpen={isEditAvatarPopupOpen}
@@ -150,6 +179,12 @@ function App() {
                     card={selectedCard}
                     onClose={closeAllPopups}
                 />
+
+                <InfoTooltip
+                    isOpen={isInfoTooltipOpen}
+                    onClose={closeAllPopups}
+                />
+
                 <Footer />
             </div>
         </CurrentUser.Provider>

@@ -1,0 +1,10 @@
+.access__input {
+    background-color: black;
+    border: none;
+    border-bottom: #CCC 2px solid;
+    margin: 0 0 30px;
+    width: 100%;
+    font-size: 14px;
+    line-height: 1.2;
+    color: white;
+}
