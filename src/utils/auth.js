@@ -9,7 +9,7 @@ class Auth {
         return res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status} - ${res.statusText}`)
     }
 
-    async register({ password, email }) {
+    async checkIn({ password, email }) {
         const res = await fetch(`${this._url}/signup`, {
             method: 'POST',
             headers: {
@@ -23,7 +23,7 @@ class Auth {
         return this._checkResponse(res);
     }
 
-    async login({ password, email }) {
+    async comeIn({ password, email }) {
         const res = await fetch(`${this._url}/signin`, {
             method: 'POST',
             headers: {
@@ -37,7 +37,7 @@ class Auth {
         return this._checkResponse(res);
     }
 
-    async autoAuth() {
+    async checkToken() {
         const res = await fetch(`${this._url}/users/me`, {
             method: 'GET', 
             headers: {
@@ -47,7 +47,6 @@ class Auth {
         });
         return this._checkResponse(res);
     }
-
 }
 
 const auth = new Auth({

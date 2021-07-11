@@ -44,10 +44,15 @@ function Register(props) {
                     onChange={handleChangePassword}
                     required
                 />
-                <button type="submit" className="access__submit">Зарегистрироваться</button>
+                {
+                    props.clickSubmit ?
+                        <button type="submit" className="access__submit" style={{ color: 'grey' }}>Отправляем...</button>
+                        :
+                        <button type="submit" className="access__submit">Зарегистрироваться</button>
+                }
             </form>
             <p className="access__isRegistrated">Уже зарегистрированы?
-                <span className="access__welcome">Войти</span>
+                <span className="access__welcome" onClick={props.handleComeIn}>Войти</span>
             </p>
         </div>
     );

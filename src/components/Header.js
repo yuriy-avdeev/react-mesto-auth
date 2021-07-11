@@ -1,33 +1,35 @@
 import logo from '../images/logo.svg';
 import React from 'react';
-import { useHistory } from 'react-router-dom';
 
-function Header({ userEmail, loggedIn }) {
-
-    const history = useHistory();
-
-    const handleClick = () => {
-        loggedIn && localStorage.removeItem('token')
-        history.push('/sign-in')
-    }
+function Header({ userEmail, loggedIn, handleClickOut, handleClickRegistration, handleLogoClick, moveToRegistration }) {
 
     return (
         <header className="header">
-            <img className="header__logo" src={logo} alt="логотип" />
+            <img className="header__logo" src={logo} alt="логотип" onClick={handleLogoClick} />
             <div className="header__container-auth">
                 {
-                    userEmail
+                    loggedIn
                         ?
-                        <p className="header__email">{userEmail}</p>
+                        <>
+                            <p className="header__email">{userEmail}</p>
+                            <p className="header__button-auth" onClick={handleClickOut}>Выйти</p>
+                        </>
                         :
-                        ''
+                        <p className="header__button-auth" onClick={handleClickRegistration}>
+                            Регистрация
+                        </p>
                 }
-                <p
-                    className="header__button-auth"
-                    onClick={handleClick}
-                    >
-                    {loggedIn ? 'Выйти' : 'Войти'}
-                </p>
+
+                {moveToRegistration ?
+                    <p className="header__button-auth" onClick={handleClickRegistration}>
+                        Регистрация
+                    </p>
+                    :
+                    <p className="header__button-auth" onClick={handleClickRegistration}>
+                        Войти
+                    </p>
+                }
+
             </div>
         </header >
     );

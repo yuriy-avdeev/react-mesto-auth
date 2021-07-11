@@ -44,7 +44,12 @@ function Login(props) {
                     onChange={handleChangePassword}
                     required
                 />
-                <button type="submit" className="access__submit">Войти</button>
+                {
+                    props.clickSubmit ?
+                        <button type="submit" className="access__submit" style={{ color: 'grey' }}>Отправляем...</button>
+                        :
+                        <button type="submit" className="access__submit">Войти</button>
+                }
             </form>
         </div>
     );

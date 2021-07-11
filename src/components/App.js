@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Switch, useHistory } from 'react-router-dom';
-import PronectedRoute from './ProtectedRoute';
+import ProtectedRoute from './ProtectedRoute';
 import Header from './Header';
 import Footer from './Footer';
 import Main from './Main';
@@ -17,23 +17,27 @@ import { CurrentUser } from '../contexts/CurrentUserContext';
 
 function App() {
 
+    const history = useHistory();
     const [currentUser, setCurrentUser] = React.useState();
     const [cards, setCards] = React.useState([]);
     const [loggedIn, setLoggedIn] = React.useState(false);
-    const history = useHistory();
     const [userEmail, setUserEmail] = React.useState('');
+    const [validQuery, setValidQuery] = React.useState(false);
+    const [infoTooltipOpen, setInfoTooltipOpen] = React.useState(false);
+    const [clickSubmit, setClickSubmit] = React.useState(false);
 
+    // проверка токена и отрисовка (при изме пути (history) или стейта (loggedIn))
     React.useEffect(() => {
         if (localStorage.token) {
-            auth.autoAuth()
+            auth.checkToken()
                 .then(data => {
                     setLoggedIn(true);
                     setUserEmail(data.data.email);
-                    history.push('/');
+                    moveToMain();
                 })
                 .catch(err => console.log(err))
         }
-    }, [history]);
+    }, [history, loggedIn]);
 
     React.useEffect(() => {
         api.getUserInfo()
@@ -46,18 +50,85 @@ function App() {
     React.useEffect(() => {
         api.getCards()
             .then(dataCardList => {
-                dataCardList = dataCardList.slice(0, 1);  // <=
+                dataCardList = dataCardList.slice(0, 1);  // <=================================================
                 setCards(dataCardList);
             })
             .catch(err => console.log(err))
     }, []);
+
+    // авторизация при сабмите
+    const onLogin = ({ password, email }) => {
+        setClickSubmit(true);
+        auth.comeIn({ password, email })
+            .then((data) => {
+                if (data.token) {
+                    localStorage.setItem('token', data.token);
+                    setLoggedIn(true);
+                    setClickSubmit(false);
+                }
+            })
+            .catch((err) => {
+                console.log(err)
+                setValidQuery(false);
+                setInfoTooltipOpen(true)
+                setClickSubmit(false);
+            })
+    }
+
+    const onSignOut = () => {
+        loggedIn && localStorage.removeItem('token');
+        moveToAuth();
+        setLoggedIn(false);
+    }
+
+    // регистрация при сабмите
+    const onRegister = ({ password, email }) => {
+        setClickSubmit(true);
+        auth.checkIn({ password, email })
+            .then((data) => {
+                if (data) {
+                    setValidQuery(true);
+                    setValidQuery && setInfoTooltipOpen(true);
+                    setTimeout(moveToAuth, 1500);
+                    setClickSubmit(false);
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+                setValidQuery(false);
+                setInfoTooltipOpen(true);
+                setClickSubmit(false);
+            })
+    }
+
+    const moveToMain = () => {
+        history.push('/')
+    }
+
+    const moveToAuth = () => {
+        history.push('/sign-in');
+        if (setInfoTooltipOpen) {
+            setInfoTooltipOpen(false);
+            !setInfoTooltipOpen && setValidQuery(false);
+        }
+    }
+
+    const moveToRegistration = (evt) => {
+        history.push('/sign-up');
+        console.log(evt.target.textContent)
+        evt.target.textContent = 'Войти'  /// --------------------------------------------------------------------------------------------
+    }
+//    слушатель на ^ или v
+
+
+
 
     const closeAllPopups = () => {
         setIsEditAvatarPopupOpen(false);
         setIsAddPlacePopupOpen(false);
         setIsEditProfilePopupOpen(false);
         setSelectedCard();
-        setIsInfoTooltipOpen(false);
+        setInfoTooltipOpen(false);
     }
 
     const handleCardLike = (clickedCard) => {
@@ -136,58 +207,35 @@ function App() {
         setSelectedCard(card);
     }
 
-    // информация о регистрации
-    const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState(false);
-    // setIsInfoTooltipOpen(!isInfoTooltipOpen); // <<<<<<<<<<<<===============FIX
-
-    // регистрация
-    const handleRegistrationSubmit = ({ password, email }) => {
-        auth.register({ password, email })
-            .then((data) => {
-                console.log(data); // сюда tooltipopen c 'v' и с задержкой направить на авторизацию - ?
-            })
-            .catch(err => console.log(err))
-    }
-
-    // авторизация - вход
-    const handleLoginSubmit = ({ password, email }) => {
-        auth.login({ password, email })
-            .then((data) => {
-                if (data.token) {
-                    localStorage.setItem('token', data.token);
-                    history.push('/');
-                    console.log(data.token)
-                } else {
-                    return
-                }
-            })
-            .catch(err => console.log(err)) // tooltipopen c 'x'
-    }
-
-
-
     return (
         <CurrentUser.Provider value={currentUser}>
             <div className="page">
                 <Header
                     userEmail={userEmail}
                     loggedIn={loggedIn}
+                    handleClickOut={onSignOut}
+                    handleClickRegistration={moveToRegistration}
+                    handleLogoClick={moveToMain}
+                    moveToRegistration={moveToRegistration}
                 />
 
                 <Switch>
-                    <Route path="/sign-in">
+                    <Route exact path="/sign-in">
                         <Login
-                            handleLoginSubmit={handleLoginSubmit}
+                            handleLoginSubmit={onLogin}
+                            clickSubmit={clickSubmit}
                         />
                     </Route>
 
-                    <Route path="/sign-up">
+                    <Route exact path="/sign-up">
                         <Register
-                            handleRegistrationSubmit={handleRegistrationSubmit}
+                            handleRegistrationSubmit={onRegister}
+                            handleComeIn={moveToAuth}
+                            clickSubmit={clickSubmit}
                         />
                     </Route>
 
-                    <PronectedRoute
+                    <ProtectedRoute
                         path="/"
                         loggedIn={loggedIn}
                         component={Main}
@@ -199,11 +247,6 @@ function App() {
                         onCardLike={handleCardLike}
                         onCardDelete={handleCardDelete}
                     />
-
-                    {/* <Route path="/">
-                        {loggedIn ? (<Redirect to="/" />) : (<Redirect to="/sign-in" />)}
-                    </Route> */}
-
                 </Switch>
 
                 <EditAvatarPopup
@@ -230,8 +273,9 @@ function App() {
                 />
 
                 <InfoTooltip
-                    isOpen={isInfoTooltipOpen}
+                    isOpen={infoTooltipOpen}
                     onClose={closeAllPopups}
+                    validQuery={validQuery}
                 />
 
                 <Footer />
