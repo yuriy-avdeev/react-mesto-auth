@@ -7,6 +7,10 @@
 
 @import url(./blocks/header/header.css);
 @import url(./blocks/header/__logo/header__logo.css);
+@import url(./blocks/header/__container-auth/header__container-auth.css);
+@import url(./blocks/header/__email/header__email.css);
+@import url(./blocks/header/__button-auth/header__button-auth.css);
+/* @import url(./blocks/header); */
 
 @import url(./blocks/profile/profile.css);
 @import url(./blocks/profile/__photo/profile__photo.css);

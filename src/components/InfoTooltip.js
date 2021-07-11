@@ -4,7 +4,7 @@ import UnionX from '../images/union-x.svg';
 
 function InfoTooltip({ isOpen, onClose }) {
 
-    const [registrationQuery, setRegistrationQuery] = React.useState(true); // перенести выше
+    const [registrationQuery, setRegistrationQuery] = React.useState(false); // перенести выше
 
     const handleFieldClick = (evt) => {
         evt.target === evt.currentTarget && onClose();

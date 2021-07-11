@@ -1,12 +1,15 @@
 import React from 'react';
 
-function Register() {
+function Register(props) {
 
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
 
     const handleSubmit = (evt) => {
         evt.preventDefault();
+        props.handleRegistrationSubmit({ password, email });
+        setEmail('');
+        setPassword('');
     }
 
     const handleChangeEmail = (evt) => {

@@ -1,0 +1,11 @@
+.header__button-auth {
+    font-weight: normal;
+    font-size: 18px; 
+    line-height: 1.2; 
+    margin: 0; 
+    cursor: pointer;
+}
+
+.header__button-auth:hover {
+    opacity: 0.6;
+}

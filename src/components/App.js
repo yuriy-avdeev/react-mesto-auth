@@ -1,5 +1,6 @@
 import React from 'react';
-import { Route, Switch, Redirect } from 'react-router-dom';
+import { Route, Switch, useHistory } from 'react-router-dom';
+import PronectedRoute from './ProtectedRoute';
 import Header from './Header';
 import Footer from './Footer';
 import Main from './Main';
@@ -11,6 +12,7 @@ import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
 import api from '../utils/api';
+import auth from '../utils/auth';
 import { CurrentUser } from '../contexts/CurrentUserContext';
 
 function App() {
@@ -18,6 +20,20 @@ function App() {
     const [currentUser, setCurrentUser] = React.useState();
     const [cards, setCards] = React.useState([]);
     const [loggedIn, setLoggedIn] = React.useState(false);
+    const history = useHistory();
+    const [userEmail, setUserEmail] = React.useState('');
+
+    React.useEffect(() => {
+        if (localStorage.token) {
+            auth.autoAuth()
+                .then(data => {
+                    setLoggedIn(true);
+                    setUserEmail(data.data.email);
+                    history.push('/');
+                })
+                .catch(err => console.log(err))
+        }
+    }, [history]);
 
     React.useEffect(() => {
         api.getUserInfo()
@@ -30,7 +46,7 @@ function App() {
     React.useEffect(() => {
         api.getCards()
             .then(dataCardList => {
-                dataCardList = dataCardList.slice(0, 3);  // <=
+                dataCardList = dataCardList.slice(0, 1);  // <=
                 setCards(dataCardList);
             })
             .catch(err => console.log(err))
@@ -121,38 +137,71 @@ function App() {
     }
 
     // информация о регистрации
-    const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState(true);
-
+    const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState(false);
     // setIsInfoTooltipOpen(!isInfoTooltipOpen); // <<<<<<<<<<<<===============FIX
+
+    // регистрация
+    const handleRegistrationSubmit = ({ password, email }) => {
+        auth.register({ password, email })
+            .then((data) => {
+                console.log(data); // сюда tooltipopen c 'v' и с задержкой направить на авторизацию - ?
+            })
+            .catch(err => console.log(err))
+    }
+
+    // авторизация - вход
+    const handleLoginSubmit = ({ password, email }) => {
+        auth.login({ password, email })
+            .then((data) => {
+                if (data.token) {
+                    localStorage.setItem('token', data.token);
+                    history.push('/');
+                    console.log(data.token)
+                } else {
+                    return
+                }
+            })
+            .catch(err => console.log(err)) // tooltipopen c 'x'
+    }
+
+
 
     return (
         <CurrentUser.Provider value={currentUser}>
             <div className="page">
-                <Header />
+                <Header
+                    userEmail={userEmail}
+                    loggedIn={loggedIn}
+                />
 
                 <Switch>
-                    <Route exact path="/mesto-react-auth">
-                        <Main
-                            onEditAvatar={handleEditAvatarClick}
-                            onAddPlace={handleAddPlaceClick}
-                            onEditProfile={handleEditProfileClick}
-                            onCardClick={handleCardClick}
-                            cards={cards}
-                            onCardLike={handleCardLike}
-                            onCardDelete={handleCardDelete}
+                    <Route path="/sign-in">
+                        <Login
+                            handleLoginSubmit={handleLoginSubmit}
                         />
                     </Route>
 
-                    <Route path="/mesto-react-auth/log-in">
-                        <Login />
+                    <Route path="/sign-up">
+                        <Register
+                            handleRegistrationSubmit={handleRegistrationSubmit}
+                        />
                     </Route>
 
-                    <Route path="/mesto-react-auth/sign-up">
-                        <Register />
-                    </Route>
+                    <PronectedRoute
+                        path="/"
+                        loggedIn={loggedIn}
+                        component={Main}
+                        onEditAvatar={handleEditAvatarClick}
+                        onAddPlace={handleAddPlaceClick}
+                        onEditProfile={handleEditProfileClick}
+                        onCardClick={handleCardClick}
+                        cards={cards}
+                        onCardLike={handleCardLike}
+                        onCardDelete={handleCardDelete}
+                    />
 
-                    {/* <Route exact path="/">
-                        {loggedIn ? <Redirect to="/mesto-react-auth" /> : <Redirect to="/mesto-react-auth/log-in" />}
+                    {/* <Route path="/">
+                        {loggedIn ? (<Redirect to="/" />) : (<Redirect to="/sign-in" />)}
                     </Route> */}
 
                 </Switch>

@@ -1,43 +1,34 @@
 import logo from '../images/logo.svg';
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 
-function Header() {
+function Header({ userEmail, loggedIn }) {
 
-    const loggedIn = false; // передавать  в пропс
-    const [hover, setHover] = React.useState(false);
+    const history = useHistory();
 
-    const handleMouseHover = () => {
-        setHover(!hover)
+    const handleClick = () => {
+        loggedIn && localStorage.removeItem('token')
+        history.push('/sign-in')
     }
-
-    // <div className="header__container-auth" style={{ display: 'flex' }}>
-    //     <p
-    //         className="header__email"
-    //         style={{ fontWeight: '500', fontSize: '18px', lineHeight: '1.2', margin: '0 24px 0 0' }}>
-    //         email@mail.com
-    //     </p>
-    //     <p
-    //         className="header__button-out"
-    //         style={{ color: '#A9A9A9', fontWeight: 'normal', fontSize: '18px', lineHeight: '1.2', margin: '0', cursor: 'pointer' }}>
-    //         Выйти
-    //     </p>
-    // </div>
 
     return (
         <header className="header">
             <img className="header__logo" src={logo} alt="логотип" />
-            <p
-                className="header__button-auth"
-                onMouseEnter={handleMouseHover}
-                onMouseLeave={handleMouseHover}
-                style={!hover ?
-                    { fontWeight: 'normal', fontSize: '18px', lineHeight: '1.2', margin: '0', cursor: 'pointer' }
-                    :
-                    { fontWeight: 'normal', fontSize: '18px', lineHeight: '1.2', margin: '0', cursor: 'pointer', opacity: '0.6' }
+            <div className="header__container-auth">
+                {
+                    userEmail
+                        ?
+                        <p className="header__email">{userEmail}</p>
+                        :
+                        ''
                 }
-            >
-                {!loggedIn ? 'Регистрация' : 'Войти'}
-            </p>
+                <p
+                    className="header__button-auth"
+                    onClick={handleClick}
+                    >
+                    {loggedIn ? 'Выйти' : 'Войти'}
+                </p>
+            </div>
         </header >
     );
 

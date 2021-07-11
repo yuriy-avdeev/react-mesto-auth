@@ -1,12 +1,15 @@
 import React from 'react';
 
-function Login() {
+function Login(props) {
 
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
 
     const handleSubmit = (evt) => {
         evt.preventDefault();
+        props.handleLoginSubmit({ password, email });
+        setEmail('');
+        setPassword('');
     }
 
     const handleChangeEmail = (evt) => {

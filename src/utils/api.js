@@ -84,7 +84,7 @@ class Api {
     }
 }
 
-const api = new Api({         // <=  тут же создал экзмепляр, ниже его экспортировал
+const api = new Api({         // <=  тут же создал экзмепляр, ниже экспорт
     url: urlFetch,
     headers: {
         authorization: token,
