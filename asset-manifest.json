@@ -1,0 +1,26 @@
+{
+  "files": {
+    "main.css": "/mesto-react-auth/static/css/main.faa552dc.chunk.css",
+    "main.js": "/mesto-react-auth/static/js/main.17842822.chunk.js",
+    "main.js.map": "/mesto-react-auth/static/js/main.17842822.chunk.js.map",
+    "runtime-main.js": "/mesto-react-auth/static/js/runtime-main.0c001446.js",
+    "runtime-main.js.map": "/mesto-react-auth/static/js/runtime-main.0c001446.js.map",
+    "static/js/2.8bbdecd1.chunk.js": "/mesto-react-auth/static/js/2.8bbdecd1.chunk.js",
+    "static/js/2.8bbdecd1.chunk.js.map": "/mesto-react-auth/static/js/2.8bbdecd1.chunk.js.map",
+    "static/js/3.c3f1577d.chunk.js": "/mesto-react-auth/static/js/3.c3f1577d.chunk.js",
+    "static/js/3.c3f1577d.chunk.js.map": "/mesto-react-auth/static/js/3.c3f1577d.chunk.js.map",
+    "index.html": "/mesto-react-auth/index.html",
+    "static/css/main.faa552dc.chunk.css.map": "/mesto-react-auth/static/css/main.faa552dc.chunk.css.map",
+    "static/js/2.8bbdecd1.chunk.js.LICENSE.txt": "/mesto-react-auth/static/js/2.8bbdecd1.chunk.js.LICENSE.txt",
+    "static/media/index.css": "/mesto-react-auth/static/media/plus.d5d6f8af.svg",
+    "static/media/logo.5f3664ca.svg": "/mesto-react-auth/static/media/logo.5f3664ca.svg",
+    "static/media/union-v.1b6082f8.svg": "/mesto-react-auth/static/media/union-v.1b6082f8.svg",
+    "static/media/union-x.df8eddf6.svg": "/mesto-react-auth/static/media/union-x.df8eddf6.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.0c001446.js",
+    "static/js/2.8bbdecd1.chunk.js",
+    "static/css/main.faa552dc.chunk.css",
+    "static/js/main.17842822.chunk.js"
+  ]
+}
