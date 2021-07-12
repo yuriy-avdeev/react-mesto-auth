@@ -6,7 +6,7 @@ class Auth {
     }
 
     _checkResponse(res) {
-        return res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status} - ${res.statusText}`)
+        return res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status} - ${res.statusText}`);
     }
 
     async checkIn({ password, email }) {

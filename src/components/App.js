@@ -25,6 +25,7 @@ function App() {
     const [validQuery, setValidQuery] = React.useState(false);
     const [infoTooltipOpen, setInfoTooltipOpen] = React.useState(false);
     const [clickSubmit, setClickSubmit] = React.useState(false);
+    const [showRegistration, setShowRegistration] = React.useState(true)
 
     // проверка токена и отрисовка (при изме пути (history) или стейта (loggedIn))
     React.useEffect(() => {
@@ -50,7 +51,7 @@ function App() {
     React.useEffect(() => {
         api.getCards()
             .then(dataCardList => {
-                dataCardList = dataCardList.slice(0, 1);  // <=================================================
+                dataCardList = dataCardList.slice(0, 6);  // <=
                 setCards(dataCardList);
             })
             .catch(err => console.log(err))
@@ -68,13 +69,14 @@ function App() {
                 }
             })
             .catch((err) => {
-                console.log(err)
+                console.log(err);
                 setValidQuery(false);
-                setInfoTooltipOpen(true)
+                setInfoTooltipOpen(true);
                 setClickSubmit(false);
             })
     }
 
+    // клик на 'Выход' - удаление токена
     const onSignOut = () => {
         loggedIn && localStorage.removeItem('token');
         moveToAuth();
@@ -101,27 +103,28 @@ function App() {
             })
     }
 
+    // пути
     const moveToMain = () => {
-        history.push('/')
+        if (loggedIn) {
+            history.push('/');
+        } else {
+            moveToAuth();
+        }
     }
 
     const moveToAuth = () => {
         history.push('/sign-in');
+        setShowRegistration(true);
         if (setInfoTooltipOpen) {
             setInfoTooltipOpen(false);
             !setInfoTooltipOpen && setValidQuery(false);
         }
     }
 
-    const moveToRegistration = (evt) => {
+    const moveToRegistration = () => {
         history.push('/sign-up');
-        console.log(evt.target.textContent)
-        evt.target.textContent = 'Войти'  /// --------------------------------------------------------------------------------------------
+        setShowRegistration(false);
     }
-//    слушатель на ^ или v
-
-
-
 
     const closeAllPopups = () => {
         setIsEditAvatarPopupOpen(false);
@@ -214,9 +217,10 @@ function App() {
                     userEmail={userEmail}
                     loggedIn={loggedIn}
                     handleClickOut={onSignOut}
-                    handleClickRegistration={moveToRegistration}
                     handleLogoClick={moveToMain}
+                    showRegistration={showRegistration}
                     moveToRegistration={moveToRegistration}
+                    moveToAuth={moveToAuth}
                 />
 
                 <Switch>

@@ -6,7 +6,7 @@ const Card = React.memo((props) => {
     const currentUser = React.useContext(CurrentUser);
     const isOwnCard = props.card.owner._id === currentUser._id;
     const isLikedCard = props.card.likes.some(someLike => someLike._id === currentUser._id);
-    // консты для именения рендера корзины и лайка (в className): -v
+    // консты для именения рендера корзины и лайка (в className): - v
     const cardDeleteButtonClassName = (`card__basket ${!isOwnCard && 'card__basket_hidden'}`);
     const cardLikeButtonClassName = (`card__like ${isLikedCard && 'card__like_click'}`);
 

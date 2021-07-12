@@ -18,8 +18,8 @@ function AddPlacePopup(props) {
         evt.preventDefault();
         props.onAddPlace({ name, url });
         // evt.target.reset(); // <= только с useRef
-        setName('')
-        setUrl('')
+        setName('');
+        setUrl('');
     }
 
     return (
