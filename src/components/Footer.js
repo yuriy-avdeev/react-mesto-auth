@@ -1,7 +1,10 @@
 function Footer() {
+
+    const date = new Date;
+
     return (
         <footer className="footer">
-            <p className="footer__copyright">&copy; 2021 Mesto Russia</p>
+            <p className="footer__copyright">&copy; {date.getFullYear()} Mesto Russia</p>
         </footer>
     );
 }

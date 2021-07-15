@@ -1,25 +1,26 @@
 import React from 'react';
 import { CurrentUser } from '../contexts/CurrentUserContext';
 
-const Card = React.memo((props) => {
+const Card = React.memo(({ onCardClick, card, onCardLike, onCardDelete }) => {
 
     const currentUser = React.useContext(CurrentUser);
-    const isOwnCard = props.card.owner._id === currentUser._id;
-    const isLikedCard = props.card.likes.some(someLike => someLike._id === currentUser._id);
+    const isOwnCard = card.owner._id === currentUser._id;
+    const isLikedCard = card.likes.some(someLike =>
+        someLike._id === currentUser._id);
     // консты для именения рендера корзины и лайка (в className): - v
     const cardDeleteButtonClassName = (`card__basket ${!isOwnCard && 'card__basket_hidden'}`);
     const cardLikeButtonClassName = (`card__like ${isLikedCard && 'card__like_click'}`);
 
     const handleClick = () => {
-        props.onCardClick(props.card);
+        onCardClick(card);
     }
 
     const handleLikeClick = () => {
-        props.onCardLike(props.card);
+        onCardLike(card);
     }
 
     const handleDeleteClick = () => {
-        props.onCardDelete(props.card);
+        onCardDelete(card);
     }
 
     return (
@@ -28,12 +29,9 @@ const Card = React.memo((props) => {
             <div
                 className="card__image"
                 onClick={handleClick}
-                style={{
-                    backgroundImage: `url(${props.card.link})`,
-                    backgroundSize: 'cover',
-                }}>
+                style={{ backgroundImage: `url(${card.link})` }}>
             </div>
-            <h2 className="card__caption">{props.card.name}</h2>
+            <h2 className="card__caption">{card.name}</h2>
 
             <div className="card__like-area">
                 <button
@@ -43,7 +41,7 @@ const Card = React.memo((props) => {
                     onClick={handleLikeClick}
                 >
                 </button>
-                <p className="card__like-number" value="like-number">{props.card.likes.length}</p>
+                <p className="card__like-number" value="like-number">{card.likes.length}</p>
             </div>
 
             <button

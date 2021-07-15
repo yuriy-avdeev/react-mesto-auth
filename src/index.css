@@ -64,6 +64,7 @@
 @import url(./blocks/access/__form/access__form.css);
 @import url(./blocks/access/__input/access__input.css);
 @import url(./blocks/access/__isRegistrated/access__isRegistrated.css);
+@import url(./blocks/access/__submit/_active/access__submit_active.css);
 @import url(./blocks/access/__submit/access__submit.css);
 @import url(./blocks/access/__titile/access__titile.css);
 @import url(./blocks/access/__welcome/access__welcome.css);

@@ -1,15 +1,14 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
-function Register(props) {
+function Register({ handleRegistrationSubmit, isSubmitting }) {
 
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
 
     const handleSubmit = (evt) => {
         evt.preventDefault();
-        props.handleRegistrationSubmit({ password, email });
-        setEmail('');
-        setPassword('');
+        handleRegistrationSubmit({ password, email });
     }
 
     const handleChangeEmail = (evt) => {
@@ -45,14 +44,14 @@ function Register(props) {
                     required
                 />
                 {
-                    props.clickSubmit ?
-                        <button type="submit" className="access__submit" style={{ color: 'grey' }}>Отправляем...</button>
+                    isSubmitting ?
+                        <button type="submit" className="access__submit access__submit_active" disabled>Отправляем...</button>
                         :
                         <button type="submit" className="access__submit">Зарегистрироваться</button>
                 }
             </form>
             <p className="access__isRegistrated">Уже зарегистрированы?
-                <span className="access__welcome" onClick={props.handleComeIn}>Войти</span>
+                <Link className="access__welcome" to='/react-mesto-auth/sign-in'>Войти</Link>
             </p>
         </div>
     );

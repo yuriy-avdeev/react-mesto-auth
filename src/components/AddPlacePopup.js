@@ -1,10 +1,17 @@
 import React from 'react';
 import PopupWithForm from './PopupWithForm';
 
-function AddPlacePopup(props) {
+function AddPlacePopup({ isOpen, onClose, onAddPlace, isSubmitting }) {
 
     const [name, setName] = React.useState('');
     const [url, setUrl] = React.useState('');
+
+    React.useEffect(() => {
+        if (!isOpen) {
+            setName('');
+            setUrl('');
+        }
+    }, [isOpen]);
 
     const handleNameInput = (evt) => {
         setName(evt.target.value);
@@ -16,20 +23,18 @@ function AddPlacePopup(props) {
 
     const handleSubmit = (evt) => {
         evt.preventDefault();
-        props.onAddPlace({ name, url });
+        onAddPlace({ name, url });
         // evt.target.reset(); // <= только с useRef
-        setName('');
-        setUrl('');
     }
 
     return (
         <PopupWithForm
             title='Новая карточка'
             name='addPlace'
-            isOpen={props.isOpen}
-            onClose={props.onClose}
+            isOpen={isOpen}
+            onClose={onClose}
             onSubmit={handleSubmit}
-            buttonText='Создать'
+            buttonText={isSubmitting ? 'Создаем...' : 'Создать'}
         >
             <input
                 id="place-input"

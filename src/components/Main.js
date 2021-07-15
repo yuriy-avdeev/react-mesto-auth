@@ -3,9 +3,19 @@ import { CurrentUser } from '../contexts/CurrentUserContext';
 import editPen from '../images/edit-pen.svg'
 import Card from './Card'
 
-function Main(props) {
+function Main({ onEditAvatar, onAddPlace, onEditProfile, onCardClick, cards, onCardLike, onCardDelete }) {
 
     const currentUser = React.useContext(CurrentUser);
+
+    const someCard = cards.map(card => (
+        <Card
+            key={card._id}  // служит подсказкой для React, но не передается в компонент
+            onCardClick={onCardClick}
+            card={card}
+            onCardLike={onCardLike}
+            onCardDelete={onCardDelete}
+        />
+    ));
 
     return (
         <main>
@@ -23,7 +33,7 @@ function Main(props) {
                         className="profile__avatar-edit"
                         src={editPen}
                         alt="изображение ручки-редактора"
-                        onClick={props.onEditAvatar}
+                        onClick={onEditAvatar}
                     />
                 </div>
                 <div className="profile__information">
@@ -35,29 +45,19 @@ function Main(props) {
                         className="profile__editor-popup profile__click"
                         type="button"
                         aria-label="откроем редактор профиля пользователя"
-                        onClick={props.onEditProfile}
+                        onClick={onEditProfile}
                     ></button>
                 </div>
                 <button
                     className="profile__add-place profile__click"
                     aria-label="добавим фотографию"
                     type="button"
-                    onClick={props.onAddPlace}
+                    onClick={onAddPlace}
                 ></button>
             </section>
 
             <section className="places">
-                {
-                    props.cards.map((card, i) => (
-                        <Card
-                            key={card._id}
-                            onCardClick={props.onCardClick}
-                            card={card}
-                            onCardLike={props.onCardLike}
-                            onCardDelete={props.onCardDelete}
-                        />
-                    ))
-                }
+                {someCard}
             </section>
         </main>
     );

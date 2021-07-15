@@ -1,15 +1,13 @@
 import React from 'react';
 
-function Login(props) {
+function Login({ handleLoginSubmit, isSubmitting }) {
 
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
 
     const handleSubmit = (evt) => {
         evt.preventDefault();
-        props.handleLoginSubmit({ password, email });
-        setEmail('');
-        setPassword('');
+        handleLoginSubmit({ password, email });
     }
 
     const handleChangeEmail = (evt) => {
@@ -45,8 +43,8 @@ function Login(props) {
                     required
                 />
                 {
-                    props.clickSubmit ?
-                        <button type="submit" className="access__submit" style={{ color: 'grey' }}>Отправляем...</button>
+                    isSubmitting ?
+                        <button type="submit" className="access__submit access__submit_active" disabled>Отправляем...</button>
                         :
                         <button type="submit" className="access__submit">Войти</button>
                 }

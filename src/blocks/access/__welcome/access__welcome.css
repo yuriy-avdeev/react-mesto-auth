@@ -1,6 +1,8 @@
 .access__welcome {
     cursor: pointer;
     margin: 0 0 0 6px;
+    color: white;
+    text-decoration: none;
 }
 
 .access__welcome:hover {

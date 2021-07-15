@@ -11,6 +11,7 @@ import ImagePopup from './ImagePopup';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
+import PopupWithConfirm from './PopupWithConfirm'
 import api from '../utils/api';
 import auth from '../utils/auth';
 import { CurrentUser } from '../contexts/CurrentUserContext';
@@ -22,9 +23,9 @@ function App() {
     const [cards, setCards] = React.useState([]);
     const [loggedIn, setLoggedIn] = React.useState(false);
     const [userEmail, setUserEmail] = React.useState('');
-    const [validQuery, setValidQuery] = React.useState(false);
+    const [isAuthSuccess, setIsAuthSuccess] = React.useState(false);
     const [infoTooltipOpen, setInfoTooltipOpen] = React.useState(false);
-    const [clickSubmit, setClickSubmit] = React.useState(false);
+    const [isSubmitting, setIsSubmitting] = React.useState(false);
     const [showRegistration, setShowRegistration] = React.useState(true)
 
     // проверка токена и отрисовка (при изме пути (history) или стейта (loggedIn))
@@ -41,17 +42,12 @@ function App() {
     }, [history, loggedIn]);
 
     React.useEffect(() => {
-        api.getUserInfo()
-            .then(userData => {
-                setCurrentUser(userData);
-            })
-            .catch(err => console.log(err))
-    }, []);
+        Promise.all([api.getUserInfo(), api.getCards()])
+            .then(([userData, dataCardList]) => {
 
-    React.useEffect(() => {
-        api.getCards()
-            .then(dataCardList => {
-                dataCardList = dataCardList.slice(0, 6);  // <=
+                setCurrentUser(userData);
+
+                dataCardList = dataCardList.slice(0, 1);  // <====================
                 setCards(dataCardList);
             })
             .catch(err => console.log(err))
@@ -59,70 +55,66 @@ function App() {
 
     // авторизация при сабмите
     const onLogin = ({ password, email }) => {
-        setClickSubmit(true);
-        auth.comeIn({ password, email })
+        setIsSubmitting(true);
+        auth.authorize({ password, email })
             .then((data) => {
                 if (data.token) {
                     localStorage.setItem('token', data.token);
                     setLoggedIn(true);
-                    setClickSubmit(false);
                 }
             })
             .catch((err) => {
                 console.log(err);
-                setValidQuery(false);
+                setIsAuthSuccess(false);
                 setInfoTooltipOpen(true);
-                setClickSubmit(false);
             })
+            .finally(() => setIsSubmitting(false))
     }
 
     // клик на 'Выход' - удаление токена
     const onSignOut = () => {
-        loggedIn && localStorage.removeItem('token');
+        localStorage.removeItem('token');
         moveToAuth();
         setLoggedIn(false);
     }
 
     // регистрация при сабмите
     const onRegister = ({ password, email }) => {
-        setClickSubmit(true);
-        auth.checkIn({ password, email })
+        setIsSubmitting(true);
+        auth.register({ password, email })
             .then((data) => {
-                if (data) {
-                    setValidQuery(true);
-                    setValidQuery && setInfoTooltipOpen(true);
-                    setTimeout(moveToAuth, 1500);
-                    setClickSubmit(false);
-                }
+                // if (data) {
+                setIsAuthSuccess(true);
+                setInfoTooltipOpen(true);////////////////////////////////////
+                setTimeout(moveToAuth, 2000);
+                // console.log(infoTooltipOpen)
+                // }
             })
             .catch((err) => {
                 console.log(err);
-                setValidQuery(false);
+                setIsAuthSuccess(false);
                 setInfoTooltipOpen(true);
-                setClickSubmit(false);
             })
+            .finally(() => setIsSubmitting(false))
     }
 
     // пути
     const moveToMain = () => {
-        if (loggedIn) {
-            history.push('/');
-        } else {
-            moveToAuth();
-        }
+        history.push('/react-mesto-auth/');
     }
 
     const moveToAuth = () => {
-        history.push('/sign-in');
+        history.push('/react-mesto-auth/sign-in');
         setShowRegistration(true);
-        if (setInfoTooltipOpen) {
-            setInfoTooltipOpen(false);
-            !setInfoTooltipOpen && setValidQuery(false);
-        }
+
+        // console.log(isAuthSuccess)
+        console.log(infoTooltipOpen)
+        infoTooltipOpen && setInfoTooltipOpen(false);
+        // setIsAuthSuccess(false);/////////////////////////////////////////
     }
 
     const moveToRegistration = () => {
-        history.push('/sign-up');
+        history.push('/react-mesto-auth/sign-up');
         setShowRegistration(false);
     }
 
@@ -130,6 +122,7 @@ function App() {
         setIsEditAvatarPopupOpen(false);
         setIsAddPlacePopupOpen(false);
         setIsEditProfilePopupOpen(false);
+        setIsPopupWithDeleteCardConfirmOpen(false);
         setSelectedCard();
         setInfoTooltipOpen(false);
     }
@@ -147,60 +140,90 @@ function App() {
             .catch(err => console.log(err))
     }
 
-    const handleCardDelete = (clickedCard) => {
-        api.deleteCard(clickedCard._id)
-            .then(() => {
-                setCards(cards.filter(card => card._id !== clickedCard._id));
-            })
-            .catch(err => console.log(err))
-    }
-
     // обновление данных польз-ля
     const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
 
     const handleEditProfileClick = () => {
-        setIsEditProfilePopupOpen(!isEditProfilePopupOpen);
+        setIsEditProfilePopupOpen(true);
     }
 
     const handleUpdateUser = (enteredUserData) => {
+        setIsSubmitting(true);
         api.setUserInfo(enteredUserData)
             .then(userData => {
                 setCurrentUser(userData);
                 closeAllPopups();
             })
             .catch(err => console.log(err))
+            .finally(() => setIsSubmitting(false))
     }
 
     // добавление новой карточки 
     const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
 
     const handleAddPlaceClick = () => {
-        setIsAddPlacePopupOpen(!isAddPlacePopupOpen);
+        setIsAddPlacePopupOpen(true);
     }
 
     const handleAddPlaceSubmit = (cardData) => {
+        setIsSubmitting(true);
         api.saveNewCard(cardData)
             .then((newCard) => {
                 setCards([newCard, ...cards]);
                 closeAllPopups();
             })
             .catch(err => console.log(err))
+            .finally(() => setIsSubmitting(false))
     }
 
     // изменение аватарки
     const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
 
     const handleEditAvatarClick = () => {
-        setIsEditAvatarPopupOpen(!isEditAvatarPopupOpen);
+        setIsEditAvatarPopupOpen(true);
     }
 
     const handleUpdateAvatar = (enteredUrl) => {
+        setIsSubmitting(true)
         api.setNewAvatar(enteredUrl)
             .then(userData => {
                 setCurrentUser(userData);
                 closeAllPopups();
             })
             .catch(err => console.log(err))
+            .finally(() => setIsSubmitting(false))
+    }
+
+    //  удаление карточки
+    const [isPopupWithDeleteCardConfirmOpen, setIsPopupWithDeleteCardConfirmOpen] = React.useState(false);
+    const [removableCard, setRemovableCard] = React.useState('')
+
+    // из Card.js
+    const handleCardDelete = (clickedCard) => {
+        setIsPopupWithDeleteCardConfirmOpen(true);
+        setRemovableCard(clickedCard);
+    }
+
+    // из PopupWithConfirm.js
+    const handleClickConfirmButton = (evt) => {
+        evt.preventDefault();
+        deleteCard();
+        closeAllPopups();
+    }
+
+    const deleteCard = () => {
+        setIsSubmitting(true);
+        api.deleteCard(removableCard._id)
+            .then(() => {
+                setCards(
+                    cards.filter(card =>
+                        card._id !== removableCard._id));
+            })
+            .catch(err => console.log(err))
+            .finally(() => {
+                setRemovableCard('')
+                setIsSubmitting(false)
+            })
     }
 
     // увеличенная фотография
@@ -224,23 +247,22 @@ function App() {
                 />
 
                 <Switch>
-                    <Route exact path="/sign-in">
+                    <Route exact path="/react-mesto-auth/sign-in">
                         <Login
                             handleLoginSubmit={onLogin}
-                            clickSubmit={clickSubmit}
+                            isSubmitting={isSubmitting}
                         />
                     </Route>
 
-                    <Route exact path="/sign-up">
+                    <Route exact path="/react-mesto-auth/sign-up">
                         <Register
                             handleRegistrationSubmit={onRegister}
-                            handleComeIn={moveToAuth}
-                            clickSubmit={clickSubmit}
+                            // handleComeIn={moveToAuth} // заменил логику на Link ... to=".." 
+                            isSubmitting={isSubmitting}
                         />
                     </Route>
 
-                    <ProtectedRoute
-                        path="/"
+                    <ProtectedRoute path="/react-mesto-auth"
                         loggedIn={loggedIn}
                         component={Main}
                         onEditAvatar={handleEditAvatarClick}
@@ -257,18 +279,21 @@ function App() {
                     isOpen={isEditAvatarPopupOpen}
                     onClose={closeAllPopups}
                     onUpdateAvatar={handleUpdateAvatar}
+                    isSubmitting={isSubmitting}
                 />
 
                 <EditProfilePopup
                     isOpen={isEditProfilePopupOpen}
                     onClose={closeAllPopups}
                     onUpdateUser={handleUpdateUser}
+                    isSubmitting={isSubmitting}
                 />
 
                 <AddPlacePopup
                     isOpen={isAddPlacePopupOpen}
                     onClose={closeAllPopups}
                     onAddPlace={handleAddPlaceSubmit}
+                    isSubmitting={isSubmitting}
                 />
 
                 <ImagePopup
@@ -276,10 +301,18 @@ function App() {
                     onClose={closeAllPopups}
                 />
 
+                <PopupWithConfirm
+                    isOpen={isPopupWithDeleteCardConfirmOpen}
+                    onClose={closeAllPopups}
+                    handleClickConfirmButton={handleClickConfirmButton}
+                    isSubmitting={isSubmitting}
+                />
+
                 <InfoTooltip
                     isOpen={infoTooltipOpen}
                     onClose={closeAllPopups}
-                    validQuery={validQuery}
+                    isAuthSuccess={isAuthSuccess}
+                    notification={isAuthSuccess ? 'Вы успешно зарегистрировались!' : 'Что-то пошло не так! Попробуйте ещё раз.'}
                 />
 
                 <Footer />
