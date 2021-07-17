@@ -1,3 +1,6 @@
 .header__container-auth {
     display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
 }

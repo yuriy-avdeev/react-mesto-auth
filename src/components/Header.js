@@ -1,33 +1,36 @@
 import logo from '../images/logo.svg';
 import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
 
-function Header({ userEmail, loggedIn, handleClickOut, handleLogoClick, showRegistration, moveToRegistration, moveToAuth }) {
+function Header({ userEmail, loggedIn, handleClickOut, handleLogoClick }) {
 
-    const clickLink = () => {
-        if (showRegistration) {
-            moveToRegistration();
-        } else {
-            moveToAuth();
-        }
-    }
+    const location = useLocation(); // или > { pathname } = useLocation();
+    const [showLink, setShowLink] = React.useState('')
+
+    React.useEffect(() => {
+        location.pathname === '/react-mesto-auth/sign-in' ? setShowLink('Регистрация') : setShowLink('Войти');
+    }, [location]);
 
     return (
         <header className="header">
             <img className="header__logo" src={logo} alt="логотип" onClick={handleLogoClick} />
-            <div className="header__container-auth">
-                {
-                    loggedIn ?
-                        <>
-                            <p className="header__email">{userEmail}</p>
-                            <p className="header__button-auth" onClick={handleClickOut}>Выйти</p>
-                        </>
-                        :
-                        <p className="header__button-auth" onClick={clickLink}>
-                            {showRegistration ? 'Регистрация' : 'Войти'}
-                        </p>
-                }
-            </div>
-        </header >
+            {
+                loggedIn ?
+                    <div className="header__container-auth">
+                        <p className="header__email">{userEmail}</p>
+                        <button className="header__button-out" onClick={handleClickOut}>Выйти</button>
+                    </div>
+                    :
+                    <>
+                        <Link
+                            className="header__button-auth"
+                            to={showLink === "Регистрация" ? "/react-mesto-auth/sign-up" : "/react-mesto-auth/sign-in"}
+                        >
+                            {showLink}
+                        </Link>
+                    </>
+            }
+        </header>
     );
 }
 

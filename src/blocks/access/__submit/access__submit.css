@@ -1,15 +1,23 @@
 .access__submit {
     width: 100%;
-    height: 50px;
-    font-size: 18px;
+    height: 46px;
+    font-size: 16px;
     line-height: 1.2;
     font-weight: 400;
     cursor: pointer;
-    margin: 186px 0 0;
+    margin: 173px 0 0;
     border-radius: 2px;
     background-color: white;
 }
 
 .access__submit:hover {
     opacity: 0.8;
+}
+
+@media screen and (min-width: 880px) {
+    .access__submit {
+        height: 50px;
+        margin: 186px 0 0;
+        font-size: 18px;
+    }
 }

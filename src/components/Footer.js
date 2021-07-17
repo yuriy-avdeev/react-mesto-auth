@@ -1,6 +1,6 @@
 function Footer() {
 
-    const date = new Date;
+    const date = new Date();
 
     return (
         <footer className="footer">

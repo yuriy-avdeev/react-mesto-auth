@@ -2,8 +2,14 @@
     color: black;
     max-width: 358px;
     font-weight: 900;
-    font-size: 24px;
+    font-size: 20px;
     line-height: 1.2;
     text-align: center;
     margin: 0 auto;
+}
+
+@media screen and (min-width: 880px) {
+    .popup-access__notification {
+        font-size: 24px;
+    }
 }

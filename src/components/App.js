@@ -13,7 +13,7 @@ import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
 import PopupWithConfirm from './PopupWithConfirm'
 import api from '../utils/api';
-import auth from '../utils/auth';
+import { register, authorize, checkToken } from '../utils/auth';
 import { CurrentUser } from '../contexts/CurrentUserContext';
 
 function App() {
@@ -22,24 +22,21 @@ function App() {
     const [currentUser, setCurrentUser] = React.useState();
     const [cards, setCards] = React.useState([]);
     const [loggedIn, setLoggedIn] = React.useState(false);
-    const [userEmail, setUserEmail] = React.useState('');
     const [isAuthSuccess, setIsAuthSuccess] = React.useState(false);
     const [infoTooltipOpen, setInfoTooltipOpen] = React.useState(false);
     const [isSubmitting, setIsSubmitting] = React.useState(false);
-    const [showRegistration, setShowRegistration] = React.useState(true)
 
-    // проверка токена и отрисовка (при изме пути (history) или стейта (loggedIn))
+    // проверка токена
     React.useEffect(() => {
         if (localStorage.token) {
-            auth.checkToken()
-                .then(data => {
+            checkToken()
+                .then(() => {
                     setLoggedIn(true);
-                    setUserEmail(data.data.email);
                     moveToMain();
                 })
                 .catch(err => console.log(err))
         }
-    }, [history, loggedIn]);
+    }, []);
 
     React.useEffect(() => {
         Promise.all([api.getUserInfo(), api.getCards()])
@@ -47,7 +44,7 @@ function App() {
 
                 setCurrentUser(userData);
 
-                dataCardList = dataCardList.slice(0, 1);  // <====================
+                // dataCardList = dataCardList.slice(0, 6);  // <<<============
                 setCards(dataCardList);
             })
             .catch(err => console.log(err))
@@ -56,11 +53,13 @@ function App() {
     // авторизация при сабмите
     const onLogin = ({ password, email }) => {
         setIsSubmitting(true);
-        auth.authorize({ password, email })
+        authorize({ password, email })
             .then((data) => {
                 if (data.token) {
                     localStorage.setItem('token', data.token);
+                    localStorage.setItem('email', email)
                     setLoggedIn(true);
+                    moveToMain();
                 }
             })
             .catch((err) => {
@@ -74,6 +73,7 @@ function App() {
     // клик на 'Выход' - удаление токена
     const onSignOut = () => {
         localStorage.removeItem('token');
+        localStorage.removeItem('email');
         moveToAuth();
         setLoggedIn(false);
     }
@@ -81,21 +81,20 @@ function App() {
     // регистрация при сабмите
     const onRegister = ({ password, email }) => {
         setIsSubmitting(true);
-        auth.register({ password, email })
-            .then((data) => {
-                // if (data) {
+        register({ password, email })
+            .then(() => {
                 setIsAuthSuccess(true);
-                setInfoTooltipOpen(true);////////////////////////////////////
                 setTimeout(moveToAuth, 2000);
-                // console.log(infoTooltipOpen)
-                // }
             })
             .catch((err) => {
                 console.log(err);
-                setIsAuthSuccess(false);
                 setInfoTooltipOpen(true);
+                setIsAuthSuccess(false);
             })
-            .finally(() => setIsSubmitting(false))
+            .finally(() => {
+                setIsSubmitting(false)
+                setInfoTooltipOpen(true);/////////////////
+            })
     }
 
     // пути
@@ -105,17 +104,7 @@ function App() {
 
     const moveToAuth = () => {
         history.push('/react-mesto-auth/sign-in');
-        setShowRegistration(true);
-
-        // console.log(isAuthSuccess)
-        console.log(infoTooltipOpen)
-        infoTooltipOpen && setInfoTooltipOpen(false);
-        // setIsAuthSuccess(false);/////////////////////////////////////////
-    }
-
-    const moveToRegistration = () => {
-        history.push('/react-mesto-auth/sign-up');
-        setShowRegistration(false);
+        setInfoTooltipOpen(false);
     }
 
     const closeAllPopups = () => {
@@ -237,13 +226,10 @@ function App() {
         <CurrentUser.Provider value={currentUser}>
             <div className="page">
                 <Header
-                    userEmail={userEmail}
+                    userEmail={localStorage.email}
                     loggedIn={loggedIn}
                     handleClickOut={onSignOut}
                     handleLogoClick={moveToMain}
-                    showRegistration={showRegistration}
-                    moveToRegistration={moveToRegistration}
-                    moveToAuth={moveToAuth}
                 />
 
                 <Switch>
@@ -257,7 +243,6 @@ function App() {
                     <Route exact path="/react-mesto-auth/sign-up">
                         <Register
                             handleRegistrationSubmit={onRegister}
-                            // handleComeIn={moveToAuth} // заменил логику на Link ... to=".." 
                             isSubmitting={isSubmitting}
                         />
                     </Route>
@@ -312,7 +297,13 @@ function App() {
                     isOpen={infoTooltipOpen}
                     onClose={closeAllPopups}
                     isAuthSuccess={isAuthSuccess}
-                    notification={isAuthSuccess ? 'Вы успешно зарегистрировались!' : 'Что-то пошло не так! Попробуйте ещё раз.'}
+                    notification=
+                    {
+                        isAuthSuccess ?
+                            'Вы успешно зарегистрировались!'
+                            :
+                            'Что-то пошло не так! Попробуйте ещё раз.'
+                    }
                 />
 
                 <Footer />

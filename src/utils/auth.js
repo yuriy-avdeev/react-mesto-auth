@@ -1,30 +1,11 @@
 import { urlAuth } from "./utils";
 
-class Auth {
-    constructor({ url }) {
-        this._url = url;
-    }
-
-    _checkResponse(res) {
+    const checkResponse = (res) => {
         return res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status} - ${res.statusText}`);
     }
 
-    async register({ password, email }) {
-        const res = await fetch(`${this._url}/signup`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ 
-                password: password,
-                email: email
-            })
-        });
-        return this._checkResponse(res);
-    }
-
-    async authorize({ password, email }) {
-        const res = await fetch(`${this._url}/signin`, {
+    export const register = async ({ password, email }) => {
+        const res = await fetch(`${urlAuth}/signup`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -34,23 +15,30 @@ class Auth {
                 email: email
             })
         });
-        return this._checkResponse(res);
+        return checkResponse(res);
     }
 
-    async checkToken() {
-        const res = await fetch(`${this._url}/users/me`, {
-            method: 'GET', 
+    export const authorize = async ({ password, email }) => {
+        const res = await fetch(`${urlAuth}/signin`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                password: password,
+                email: email
+            })
+        });
+        return checkResponse(res);
+    }
+
+    export const checkToken = async () => {
+        const res = await fetch(`${urlAuth}/users/me`, {
+            method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
             }
         });
-        return this._checkResponse(res);
+        return checkResponse(res);
     }
-}
-
-const auth = new Auth({
-    url: urlAuth
-});
-
-export default auth;

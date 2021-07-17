@@ -1,10 +1,10 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 
-function ProtectedRoute({ component: Component, ...props }) {
+function ProtectedRoute({ component: Main, ...props }) {
     return (
         <Route>
-            {props.loggedIn ? <Component {...props} /> : <Redirect to="/react-mesto-auth/sign-in" />}
+            {props.loggedIn ? <Main {...props} /> : <Redirect to="/react-mesto-auth/sign-in" />}
         </Route>
     );
 };
