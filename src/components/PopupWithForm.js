@@ -12,15 +12,12 @@ function PopupWithForm({ title, name, isOpen, onClose, onSubmit, buttonText, chi
             evt.key === 'Escape' && onClose()
         }
 
-        if (isOpen) {
-            document.addEventListener('keyup', handleEsc);
-        }
+        isOpen && document.addEventListener('keyup', handleEsc);
 
         return () => {
             document.removeEventListener('keyup', handleEsc);
         };
-    },
-        [isOpen, onClose]);
+    }, [isOpen]);
 
     return (
         <div className={`popup popup_type_${name} ${isOpen && 'popup_active'}`} onClick={handleFieldClick}>

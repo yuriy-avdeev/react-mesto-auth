@@ -4,7 +4,7 @@ import { Route, Redirect } from 'react-router-dom';
 function ProtectedRoute({ component: Main, ...props }) {
     return (
         <Route>
-            {props.loggedIn ? <Main {...props} /> : <Redirect to="/react-mesto-auth/sign-in" />}
+            {props.loggedIn ? <Main {...props} /> : <Redirect to="/sign-in" />}
         </Route>
     );
 };

@@ -42,12 +42,9 @@ function Login({ handleLoginSubmit, isSubmitting }) {
                     onChange={handleChangePassword}
                     required
                 />
-                {
-                    isSubmitting ?
-                        <button type="submit" className="access__submit access__submit_active" disabled>Отправляем...</button>
-                        :
-                        <button type="submit" className="access__submit">Войти</button>
-                }
+                <button type="submit" className={`access__submit ${isSubmitting && 'access__submit_active'}`}>
+                    {isSubmitting ? 'Отправляем...' : 'Войти'}
+                </button>
             </form>
         </div>
     );

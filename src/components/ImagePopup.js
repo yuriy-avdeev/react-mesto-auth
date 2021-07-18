@@ -11,14 +11,12 @@ function ImagePopup({ card, onClose }) {
             evt.key === 'Escape' && onClose()
         }
 
-        if (card) {
-            document.addEventListener('keyup', handleEsc);
-        }
+        card && document.addEventListener('keyup', handleEsc);
 
         return () => {
             document.removeEventListener('keyup', handleEsc);
         };
-    }, [card, onClose]);
+    }, [card]);
 
     return (
         <div className={`popup popup-image ${card ? 'popup_active' : ''}`} onClick={handleFieldClick}>

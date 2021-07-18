@@ -7,7 +7,7 @@ function Main({ onEditAvatar, onAddPlace, onEditProfile, onCardClick, cards, onC
 
     const currentUser = React.useContext(CurrentUser);
 
-    const someCard = cards.map(card => (
+    const cardListForRender = cards.map(card => (
         <Card
             key={card._id}  // служит подсказкой для React, но не передается в компонент
             onCardClick={onCardClick}
@@ -57,7 +57,7 @@ function Main({ onEditAvatar, onAddPlace, onEditProfile, onCardClick, cards, onC
             </section>
 
             <section className="places">
-                {someCard}
+                {cardListForRender}
             </section>
         </main>
     );

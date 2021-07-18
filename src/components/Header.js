@@ -8,7 +8,7 @@ function Header({ userEmail, loggedIn, handleClickOut, handleLogoClick }) {
     const [showLink, setShowLink] = React.useState('')
 
     React.useEffect(() => {
-        location.pathname === '/react-mesto-auth/sign-in' ? setShowLink('Регистрация') : setShowLink('Войти');
+        location.pathname === '/sign-in' ? setShowLink('Регистрация') : setShowLink('Войти');
     }, [location]);
 
     return (
@@ -16,19 +16,21 @@ function Header({ userEmail, loggedIn, handleClickOut, handleLogoClick }) {
             <img className="header__logo" src={logo} alt="логотип" onClick={handleLogoClick} />
             {
                 loggedIn ?
-                    <div className="header__container-auth">
-                        <p className="header__email">{userEmail}</p>
-                        <button className="header__button-out" onClick={handleClickOut}>Выйти</button>
-                    </div>
+                    (
+                        <div className="header__container-auth">
+                            <p className="header__email">{userEmail}</p>
+                            <button className="header__button-out" onClick={handleClickOut}>Выйти</button>
+                        </div>
+                    )
                     :
-                    <>
+                    (
                         <Link
                             className="header__button-auth"
-                            to={showLink === "Регистрация" ? "/react-mesto-auth/sign-up" : "/react-mesto-auth/sign-in"}
+                            to={showLink === "Регистрация" ? "/sign-up" : "/sign-in"}
                         >
                             {showLink}
                         </Link>
-                    </>
+                    )
             }
         </header>
     );

@@ -43,15 +43,12 @@ function Register({ handleRegistrationSubmit, isSubmitting }) {
                     onChange={handleChangePassword}
                     required
                 />
-                {
-                    isSubmitting ?
-                        <button type="submit" className="access__submit access__submit_active" disabled>Отправляем...</button>
-                        :
-                        <button type="submit" className="access__submit">Зарегистрироваться</button>
-                }
+                <button type="submit" className={`access__submit ${isSubmitting && 'access__submit_active'}`}>
+                    {isSubmitting ? 'Отправляем...' : 'Зарегистрироваться'}
+                </button>
             </form>
             <p className="access__isRegistrated">Уже зарегистрированы?
-                <Link className="access__welcome" to='/react-mesto-auth/sign-in'>Войти</Link>
+                <Link className="access__welcome" to='/sign-in'>Войти</Link>
             </p>
         </div>
     );

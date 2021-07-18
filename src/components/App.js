@@ -15,6 +15,8 @@ import PopupWithConfirm from './PopupWithConfirm'
 import api from '../utils/api';
 import { register, authorize, checkToken } from '../utils/auth';
 import { CurrentUser } from '../contexts/CurrentUserContext';
+import UnionV from '../images/union-v.svg';
+import UnionX from '../images/union-x.svg';
 
 function App() {
 
@@ -25,13 +27,15 @@ function App() {
     const [isAuthSuccess, setIsAuthSuccess] = React.useState(false);
     const [infoTooltipOpen, setInfoTooltipOpen] = React.useState(false);
     const [isSubmitting, setIsSubmitting] = React.useState(false);
+    const [userEmail, setUserEmail] = React.useState('');
 
     // проверка токена
     React.useEffect(() => {
         if (localStorage.token) {
             checkToken()
-                .then(() => {
+                .then((res) => {
                     setLoggedIn(true);
+                    setUserEmail(res.data.email);
                     moveToMain();
                 })
                 .catch(err => console.log(err))
@@ -44,7 +48,7 @@ function App() {
 
                 setCurrentUser(userData);
 
-                // dataCardList = dataCardList.slice(0, 6);  // <<<============
+                // dataCardList = dataCardList.slice(0, 3);  // <<<===
                 setCards(dataCardList);
             })
             .catch(err => console.log(err))
@@ -57,7 +61,7 @@ function App() {
             .then((data) => {
                 if (data.token) {
                     localStorage.setItem('token', data.token);
-                    localStorage.setItem('email', email)
+                    setUserEmail(email);
                     setLoggedIn(true);
                     moveToMain();
                 }
@@ -73,7 +77,7 @@ function App() {
     // клик на 'Выход' - удаление токена
     const onSignOut = () => {
         localStorage.removeItem('token');
-        localStorage.removeItem('email');
+        setUserEmail('');
         moveToAuth();
         setLoggedIn(false);
     }
@@ -85,6 +89,7 @@ function App() {
             .then(() => {
                 setIsAuthSuccess(true);
                 setTimeout(moveToAuth, 2000);
+                setTimeout(() => setInfoTooltipOpen(false), 2100);
             })
             .catch((err) => {
                 console.log(err);
@@ -93,18 +98,17 @@ function App() {
             })
             .finally(() => {
                 setIsSubmitting(false)
-                setInfoTooltipOpen(true);/////////////////
+                setInfoTooltipOpen(true);
             })
     }
 
     // пути
     const moveToMain = () => {
-        history.push('/react-mesto-auth/');
+        history.push('/');
     }
 
     const moveToAuth = () => {
-        history.push('/react-mesto-auth/sign-in');
-        setInfoTooltipOpen(false);
+        history.push('/sign-in');
     }
 
     const closeAllPopups = () => {
@@ -185,7 +189,7 @@ function App() {
 
     //  удаление карточки
     const [isPopupWithDeleteCardConfirmOpen, setIsPopupWithDeleteCardConfirmOpen] = React.useState(false);
-    const [removableCard, setRemovableCard] = React.useState('')
+    const [removableCard, setRemovableCard] = React.useState(null)
 
     // из Card.js
     const handleCardDelete = (clickedCard) => {
@@ -197,7 +201,6 @@ function App() {
     const handleClickConfirmButton = (evt) => {
         evt.preventDefault();
         deleteCard();
-        closeAllPopups();
     }
 
     const deleteCard = () => {
@@ -207,6 +210,7 @@ function App() {
                 setCards(
                     cards.filter(card =>
                         card._id !== removableCard._id));
+                closeAllPopups();
             })
             .catch(err => console.log(err))
             .finally(() => {
@@ -226,28 +230,28 @@ function App() {
         <CurrentUser.Provider value={currentUser}>
             <div className="page">
                 <Header
-                    userEmail={localStorage.email}
+                    userEmail={userEmail}
                     loggedIn={loggedIn}
                     handleClickOut={onSignOut}
                     handleLogoClick={moveToMain}
                 />
 
                 <Switch>
-                    <Route exact path="/react-mesto-auth/sign-in">
+                    <Route exact path="/sign-in">
                         <Login
                             handleLoginSubmit={onLogin}
                             isSubmitting={isSubmitting}
                         />
                     </Route>
 
-                    <Route exact path="/react-mesto-auth/sign-up">
+                    <Route exact path="/sign-up">
                         <Register
                             handleRegistrationSubmit={onRegister}
                             isSubmitting={isSubmitting}
                         />
                     </Route>
 
-                    <ProtectedRoute path="/react-mesto-auth"
+                    <ProtectedRoute path=""
                         loggedIn={loggedIn}
                         component={Main}
                         onEditAvatar={handleEditAvatarClick}
@@ -297,12 +301,16 @@ function App() {
                     isOpen={infoTooltipOpen}
                     onClose={closeAllPopups}
                     isAuthSuccess={isAuthSuccess}
+                    icon=
+                    {
+                        isAuthSuccess ?
+                            UnionV : UnionX
+                    }
+
                     notification=
                     {
                         isAuthSuccess ?
-                            'Вы успешно зарегистрировались!'
-                            :
-                            'Что-то пошло не так! Попробуйте ещё раз.'
+                            'Вы успешно зарегистрировались!' : 'Что-то пошло не так! Попробуйте ещё раз.'
                     }
                 />
 
