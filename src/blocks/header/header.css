@@ -1,19 +1,18 @@
 .header {
     border-bottom: 1px solid rgba(84, 84, 84, .7);
-    width: 100%;
-    max-width: calc(100% - 60px);
+    width: calc(100% - 20px);
+    max-width: 880px;
     margin: 0 auto 0;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     flex-direction: row;
     flex-wrap: wrap-reverse;
-    padding: 47px 0 39px;
+    padding: 27px 0 39px;
 }
 
-@media screen and (min-width: 530px) {
+@media screen and (min-width: 400px) {
     .header {
-        max-width: 880px;
-        justify-content: space-between;
+        /* flex-direction: row-reverse; */
     }
 }

@@ -8,9 +8,12 @@
 @import url(./blocks/header/header.css);
 @import url(./blocks/header/__logo/header__logo.css);
 @import url(./blocks/header/__container-auth/header__container-auth.css);
+@import url(./blocks/header/__container-auth/_hidden/header__container-auth_hidden.css);
 @import url(./blocks/header/__email/header__email.css);
 @import url(./blocks/header/__button-auth/header__button-auth.css);
 @import url(./blocks/header/__button-out/header__button-out.css);
+@import url(./blocks/header/__line/header__line.css);
+@import url(./blocks/header/__button-unwrap/header__button-unwrap.css);
 
 @import url(./blocks/profile/profile.css);
 @import url(./blocks/profile/__photo/profile__photo.css);

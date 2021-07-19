@@ -1,0 +1,22 @@
+.header__button-unwrap {
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0);
+    border: none;
+    outline: none;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    margin-top: 8px;
+}
+
+.header__button-unwrap:hover {
+    opacity: 0.6;
+}
+
+@media screen and (min-width: 480px) {
+    .header__button-unwrap {
+        display: none;
+    }
+}

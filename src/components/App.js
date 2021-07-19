@@ -32,7 +32,7 @@ function App() {
     // проверка токена
     React.useEffect(() => {
         if (localStorage.token) {
-            checkToken()
+            checkToken(localStorage.token)
                 .then((res) => {
                     setLoggedIn(true);
                     setUserEmail(res.data.email);
@@ -48,7 +48,7 @@ function App() {
 
                 setCurrentUser(userData);
 
-                // dataCardList = dataCardList.slice(0, 3);  // <<<===
+                dataCardList = dataCardList.slice(0, 6);  // <<<===
                 setCards(dataCardList);
             })
             .catch(err => console.log(err))
@@ -124,7 +124,7 @@ function App() {
         const isLikedCard = clickedCard.likes.some(someLike => someLike._id === currentUser._id);
         api.changeLikeCardStatus(clickedCard._id, isLikedCard)
             .then((returnedCard) => {
-                setCards(
+                setCards((cards) =>
                     cards.map(card =>
                         card._id === returnedCard._id ? returnedCard : card
                     )
@@ -251,7 +251,7 @@ function App() {
                         />
                     </Route>
 
-                    <ProtectedRoute path=""
+                    <ProtectedRoute path="/"
                         loggedIn={loggedIn}
                         component={Main}
                         onEditAvatar={handleEditAvatarClick}

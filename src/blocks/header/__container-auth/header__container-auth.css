@@ -1,6 +1,19 @@
 .header__container-auth {
     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    flex-direction: column;
     justify-content: center;
+    flex-wrap: wrap;
+    margin: auto;
+    width: 100%;
+    border-bottom: 1px solid rgba(84, 84, 84, .7);
+}
+
+@media screen and (min-width: 480px) {
+    .header__container-auth {
+        border: none;
+        margin: 0;
+        flex-direction: row;
+        width: fit-content;
+        border: none;
+    }
 }

@@ -32,12 +32,12 @@ import { urlAuth } from "./utils";
         return checkResponse(res);
     }
 
-    export const checkToken = async () => {
+    export const checkToken = async (token) => {
         const res = await fetch(`${urlAuth}/users/me`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
+                'Authorization': `Bearer ${token}`
             }
         });
         return checkResponse(res);

@@ -1,0 +1,9 @@
+.header__container-auth_hidden {
+    display: none;
+}
+
+@media screen and (min-width: 480px) {
+    .header__container-auth_hidden {
+        display: flex;
+    }
+}
