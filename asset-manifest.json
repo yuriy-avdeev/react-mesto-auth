@@ -1,27 +1,27 @@
 {
   "files": {
-    "main.css": "/react-mesto-auth/static/css/main.c101be80.chunk.css",
-    "main.js": "/react-mesto-auth/static/js/main.c86ecb2c.chunk.js",
-    "main.js.map": "/react-mesto-auth/static/js/main.c86ecb2c.chunk.js.map",
-    "runtime-main.js": "/react-mesto-auth/static/js/runtime-main.1c21de34.js",
-    "runtime-main.js.map": "/react-mesto-auth/static/js/runtime-main.1c21de34.js.map",
-    "static/js/2.83f99644.chunk.js": "/react-mesto-auth/static/js/2.83f99644.chunk.js",
-    "static/js/2.83f99644.chunk.js.map": "/react-mesto-auth/static/js/2.83f99644.chunk.js.map",
-    "static/js/3.e44c9127.chunk.js": "/react-mesto-auth/static/js/3.e44c9127.chunk.js",
-    "static/js/3.e44c9127.chunk.js.map": "/react-mesto-auth/static/js/3.e44c9127.chunk.js.map",
-    "index.html": "/react-mesto-auth/index.html",
-    "static/css/main.c101be80.chunk.css.map": "/react-mesto-auth/static/css/main.c101be80.chunk.css.map",
-    "static/js/2.83f99644.chunk.js.LICENSE.txt": "/react-mesto-auth/static/js/2.83f99644.chunk.js.LICENSE.txt",
-    "static/media/index.css": "/react-mesto-auth/static/media/plus.d5d6f8af.svg",
-    "static/media/close_icon.87e81ed6.svg": "/react-mesto-auth/static/media/close_icon.87e81ed6.svg",
-    "static/media/logo.5f3664ca.svg": "/react-mesto-auth/static/media/logo.5f3664ca.svg",
-    "static/media/union-v.1b6082f8.svg": "/react-mesto-auth/static/media/union-v.1b6082f8.svg",
-    "static/media/union-x.df8eddf6.svg": "/react-mesto-auth/static/media/union-x.df8eddf6.svg"
+    "main.css": "/static/css/main.02d3a55d.chunk.css",
+    "main.js": "/static/js/main.fa5d3b2d.chunk.js",
+    "main.js.map": "/static/js/main.fa5d3b2d.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.8d4ab36e.js",
+    "runtime-main.js.map": "/static/js/runtime-main.8d4ab36e.js.map",
+    "static/js/2.929320e8.chunk.js": "/static/js/2.929320e8.chunk.js",
+    "static/js/2.929320e8.chunk.js.map": "/static/js/2.929320e8.chunk.js.map",
+    "static/js/3.9f57bc45.chunk.js": "/static/js/3.9f57bc45.chunk.js",
+    "static/js/3.9f57bc45.chunk.js.map": "/static/js/3.9f57bc45.chunk.js.map",
+    "index.html": "/index.html",
+    "static/css/main.02d3a55d.chunk.css.map": "/static/css/main.02d3a55d.chunk.css.map",
+    "static/js/2.929320e8.chunk.js.LICENSE.txt": "/static/js/2.929320e8.chunk.js.LICENSE.txt",
+    "static/media/index.css": "/static/media/plus.d5d6f8af.svg",
+    "static/media/close_icon.87e81ed6.svg": "/static/media/close_icon.87e81ed6.svg",
+    "static/media/logo.5f3664ca.svg": "/static/media/logo.5f3664ca.svg",
+    "static/media/union-v.1b6082f8.svg": "/static/media/union-v.1b6082f8.svg",
+    "static/media/union-x.df8eddf6.svg": "/static/media/union-x.df8eddf6.svg"
   },
   "entrypoints": [
-    "static/js/runtime-main.1c21de34.js",
-    "static/js/2.83f99644.chunk.js",
-    "static/css/main.c101be80.chunk.css",
-    "static/js/main.c86ecb2c.chunk.js"
+    "static/js/runtime-main.8d4ab36e.js",
+    "static/js/2.929320e8.chunk.js",
+    "static/css/main.02d3a55d.chunk.css",
+    "static/js/main.fa5d3b2d.chunk.js"
   ]
 }
