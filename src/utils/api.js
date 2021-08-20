@@ -40,12 +40,12 @@ class Api {
             .then(this._checkResponse)
     }
 
-    deleteCard(id) {
-        return fetch(`${this._url}/cards/${id}`, {
+    async deleteCard(id) {
+        const res = await fetch(`${this._url}/cards/${id}`, {
             method: 'DELETE',
             headers: this._headers
-        })
-            .then(this._checkResponse)
+        });
+        return this._checkResponse(res);
     }
 
     setUserInfo({ name, about }) {
