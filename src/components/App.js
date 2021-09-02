@@ -104,11 +104,11 @@ function App() {
 
     // пути
     const moveToMain = () => {
-        history.push('/');
+        history.push('/react-mesto-auth');
     }
 
     const moveToAuth = () => {
-        history.push('/sign-in');
+        history.push('/react-mesto-auth/sign-in');
     }
 
     const closeAllPopups = () => {
@@ -237,21 +237,21 @@ function App() {
                 />
 
                 <Switch>
-                    <Route exact path="/sign-in">
+                    <Route exact path="/react-mesto-auth/sign-in">
                         <Login
                             handleLoginSubmit={onLogin}
                             isSubmitting={isSubmitting}
                         />
                     </Route>
 
-                    <Route exact path="/sign-up">
+                    <Route exact path="/react-mesto-auth/sign-up">
                         <Register
                             handleRegistrationSubmit={onRegister}
                             isSubmitting={isSubmitting}
                         />
                     </Route>
 
-                    <ProtectedRoute path="/"
+                    <ProtectedRoute path="/react-mesto-auth"
                         loggedIn={loggedIn}
                         component={Main}
                         onEditAvatar={handleEditAvatarClick}

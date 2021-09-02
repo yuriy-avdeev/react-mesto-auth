@@ -48,7 +48,7 @@ function Register({ handleRegistrationSubmit, isSubmitting }) {
                 </button>
             </form>
             <p className="access__isRegistrated">Уже зарегистрированы?
-                <Link className="access__welcome" to='/sign-in'>Войти</Link>
+                <Link className="access__welcome" to='/react-mesto-auth/sign-in'>Войти</Link>
             </p>
         </div>
     );
