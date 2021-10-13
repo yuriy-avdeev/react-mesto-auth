@@ -233,7 +233,6 @@ function App() {
                     userEmail={userEmail}
                     loggedIn={loggedIn}
                     handleClickOut={onSignOut}
-                    handleLogoClick={moveToMain}
                 />
 
                 <Switch>

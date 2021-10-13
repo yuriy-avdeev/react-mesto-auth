@@ -8,4 +8,11 @@
     line-height: 1.2;
     color: white;
     outline: none;
+    -webkit-text-fill-color: #fff;
+    box-shadow: 0 0 0 25px black inset;
+}
+
+.access__input::placeholder {
+    font-weight: 400;
+    -webkit-text-fill-color: #6b6b6b;
 }

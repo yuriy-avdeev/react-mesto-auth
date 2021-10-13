@@ -7,6 +7,8 @@ function Main({ onEditAvatar, onAddPlace, onEditProfile, onCardClick, cards, onC
 
     const currentUser = React.useContext(CurrentUser);
 
+    console.log(cards)
+
     const cardListForRender = cards.map(card => (
         <Card
             key={card._id}  // служит подсказкой для React, но не передается в компонент

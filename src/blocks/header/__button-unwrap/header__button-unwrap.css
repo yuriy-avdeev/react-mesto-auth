@@ -5,10 +5,10 @@
     background-color: rgba(0, 0, 0, 0);
     border: none;
     outline: none;
-    width: 20px;
+    width: fit-content;
     height: 20px;
     padding: 0;
-    margin-top: 8px;
+    margin-top: 6px;
 }
 
 .header__button-unwrap:hover {

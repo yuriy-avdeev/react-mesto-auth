@@ -1,7 +1,7 @@
 .header__line {
-    margin: 2px 0;
-    width: 20px;
-    height: 2px;
-    border-radius: 1px;
-    background-color: white;
+    margin-top: 6px;
+    font-size: 26px;
+    line-height: 1;
+    width: 26px;
+    color: white;
 }
