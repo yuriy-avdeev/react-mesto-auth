@@ -38,7 +38,7 @@ function App() {
                     setUserEmail(res.data.email);
                     moveToMain();
                 })
-                .catch(err => console.log(err))
+                .catch(err => console.log(`Ошибка ${err}`))
         }
     }, []);
 

@@ -7,7 +7,7 @@ function Main({ onEditAvatar, onAddPlace, onEditProfile, onCardClick, cards, onC
 
     const currentUser = React.useContext(CurrentUser);
 
-    console.log(cards)
+    // console.log(cards)
 
     const cardListForRender = cards.map(card => (
         <Card
